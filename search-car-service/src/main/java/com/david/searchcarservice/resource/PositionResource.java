@@ -70,20 +70,6 @@ public class PositionResource {
         return this.positionService.findById(id);
     }
 
-    @Operation(summary = "Get all Position")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "List of Position",
-                    content = @Content(mediaType = "application/json",
-                            schema = @Schema(implementation = Position.class))),
-            @ApiResponse(responseCode = "500",  content = @Content(mediaType = "application/json",
-                    schema = @Schema(implementation = Error.class))),
-    })
-    @ResponseStatus(HttpStatus.OK)
-    @GetMapping
-    private List<Position> findAll() {
-        return this.positionService.findAll();
-    }
-
     @Operation(summary = "Delete a Position by ID")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "204", description = "Position deleted successfully"),

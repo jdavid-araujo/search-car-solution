@@ -59,7 +59,7 @@ public class PoiServiceImpl implements PoiService {
     @Override
     public void deleteById(Long id) {
         if(!this.isExist(id)) {
-            throw new SystemException("Resource does not exist id: " + id);
+            throw new ResourceNotFoundException("Resource does not exist id: " + id);
         }
 
         this.poiRepository.deleteById(id);

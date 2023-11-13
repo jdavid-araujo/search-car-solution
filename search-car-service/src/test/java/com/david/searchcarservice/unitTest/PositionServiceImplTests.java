@@ -1,25 +1,18 @@
 package com.david.searchcarservice.unitTest;
 
-import com.david.searchcarservice.exceptionhandler.SystemException;
+import com.david.searchcarservice.exceptionhandler.ResourceNotFoundException;
 import com.david.searchcarservice.model.Position;
-import com.david.searchcarservice.model.Vehicle;
+
 import com.david.searchcarservice.repository.PositionRepository;
-import com.david.searchcarservice.service.PositionService;
 import com.david.searchcarservice.service.impl.PositionServiceImpl;
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeAll;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.DynamicPropertyRegistry;
-import org.springframework.test.context.DynamicPropertySource;
-import org.testcontainers.containers.PostgreSQLContainer;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -64,7 +57,7 @@ public class PositionServiceImplTests {
         when(positionRepository.findById(positionId)).thenReturn(Optional.empty());
 
         // Calling the service method should throw an exception
-        assertThrows(SystemException.class, () -> positionService.findById(positionId));
+        assertThrows(ResourceNotFoundException.class, () -> positionService.findById(positionId));
 
         // Verifying the interactions
         verify(positionRepository, times(1)).findById(positionId);

@@ -46,10 +46,11 @@ public class ExceptionHandlerGeneral extends ResponseEntityExceptionHandler {
     protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex,
                                                                   HttpHeaders headers, HttpStatus status, WebRequest request) {
 
-        List<ErrorMessage> messagensErro = createListError(ex.getBindingResult());
-        String title = messageSource.getMessage("message.invalid", null, LocaleContextHolder.getLocale());
+        String messageUser = messageSource.getMessage("message.invalid", null, LocaleContextHolder.getLocale());
+        String messageDeveloper = ex.getCause() != null ? ex.getCause().toString() : ex.toString();
 
-        Error erro = this.createDetailError(title, HttpStatus.BAD_REQUEST, messagensErro);
+        List<ErrorMessage> messagensErro = Arrays.asList(new ErrorMessage(messageUser, messageDeveloper));
+        Error erro = this.createDetailError(messageUser, HttpStatus.BAD_REQUEST, messagensErro);
 
         return handleExceptionInternal(ex, erro, headers, HttpStatus.BAD_REQUEST, request);
     }
@@ -62,9 +63,24 @@ public class ExceptionHandlerGeneral extends ResponseEntityExceptionHandler {
         String messageDeveloper = ExceptionUtils.getRootCauseMessage(ex);
 
         List<ErrorMessage> messagensErro = Arrays.asList(new ErrorMessage(messageUser, messageDeveloper));
-        Error erro = this.createDetailError(messageUser, HttpStatus.NOT_FOUND, messagensErro);
 
-        return handleExceptionInternal(ex, erro, new HttpHeaders(), HttpStatus.NOT_FOUND, request);
+        Error error = this.createDetailError(messageUser, HttpStatus.NOT_FOUND, messagensErro);
+
+        return handleExceptionInternal(ex, error, new HttpHeaders(), HttpStatus.NOT_FOUND, request);
+    }
+
+    @ExceptionHandler({ResourceNotFoundException.class})
+    public ResponseEntity<Object> handleEmptyResultDataAccessException(ResourceNotFoundException ex,
+                                                                       WebRequest request) {
+        String messageUser = messageSource.getMessage("resource.not-found", null,
+                LocaleContextHolder.getLocale());
+        String messageDeveloper = ExceptionUtils.getRootCauseMessage(ex);
+
+        List<ErrorMessage> messagensErro = Arrays.asList(new ErrorMessage(messageUser, messageDeveloper));
+
+        Error error = this.createDetailError(messageUser, HttpStatus.NOT_FOUND, messagensErro);
+
+        return handleExceptionInternal(ex, error, new HttpHeaders(), HttpStatus.NOT_FOUND, request);
     }
 
     @ExceptionHandler({DataIntegrityViolationException.class})
@@ -72,9 +88,11 @@ public class ExceptionHandlerGeneral extends ResponseEntityExceptionHandler {
         String messageUser = messageSource.getMessage("resource.operation-not-allowed", null, LocaleContextHolder.getLocale());
         String messageDeveloper = ExceptionUtils.getRootCauseMessage(ex);
 
-        List<ErrorMessage> erros = Arrays.asList(new ErrorMessage(messageUser, messageDeveloper));
+        List<ErrorMessage> messagensErro = Arrays.asList(new ErrorMessage(messageUser, messageDeveloper));
 
-        return handleExceptionInternal(ex, erros, new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
+        Error error = this.createDetailError(messageUser, HttpStatus.BAD_REQUEST, messagensErro);
+
+        return handleExceptionInternal(ex, error, new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
     }
 
     @ExceptionHandler({Exception.class})
@@ -82,9 +100,11 @@ public class ExceptionHandlerGeneral extends ResponseEntityExceptionHandler {
         String messageUser = messageSource.getMessage("message.general", null, LocaleContextHolder.getLocale());
         String messageDeveloper = ExceptionUtils.getRootCauseMessage(ex);
 
-        List<ErrorMessage> erros = Arrays.asList(new ErrorMessage(messageUser, messageDeveloper));
+        List<ErrorMessage> messagensErro = Arrays.asList(new ErrorMessage(messageUser, messageDeveloper));
 
-        return handleExceptionInternal(ex, erros, new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
+        Error error = this.createDetailError(messageUser, HttpStatus.BAD_REQUEST, messagensErro);
+
+        return handleExceptionInternal(ex, error, new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
     }
     private List<ErrorMessage> createListError(BindingResult bindingResult) {
         List<ErrorMessage> erros = new ArrayList<>();

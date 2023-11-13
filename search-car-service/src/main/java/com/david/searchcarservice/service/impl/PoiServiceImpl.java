@@ -1,5 +1,6 @@
 package com.david.searchcarservice.service.impl;
 
+import com.david.searchcarservice.exceptionhandler.ResourceNotFoundException;
 import com.david.searchcarservice.exceptionhandler.SystemException;
 import com.david.searchcarservice.model.Poi;
 import com.david.searchcarservice.repository.PoiRepository;
@@ -26,7 +27,7 @@ public class PoiServiceImpl implements PoiService {
     @Cacheable(value = "poiCache", key = "#id")
     @Override
     public Poi findById(Long id) {
-        return this.poiRepository.findById(id).orElseThrow(() -> new SystemException("Resource not found with id: " + id));
+        return this.poiRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Resource not found with id: " + id));
     }
 
     @Override

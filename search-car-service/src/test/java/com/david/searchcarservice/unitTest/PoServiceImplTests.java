@@ -1,6 +1,6 @@
 package com.david.searchcarservice.unitTest;
 
-import com.david.searchcarservice.exceptionhandler.SystemException;
+import com.david.searchcarservice.exceptionhandler.ResourceNotFoundException;
 import com.david.searchcarservice.model.Poi;
 import com.david.searchcarservice.repository.PoiRepository;
 import com.david.searchcarservice.service.PoiService;
@@ -76,7 +76,7 @@ public class PoServiceImplTests {
         when(poiRepository.findById(1L)).thenReturn(Optional.empty());
 
         // Calling the service method and expecting an exception
-        assertThrows(SystemException.class, () -> poiService.update(1L, new Poi()));
+        assertThrows(ResourceNotFoundException.class, () -> poiService.update(1L, new Poi()));
 
         // Verifying the result
         verify(poiRepository, times(1)).findById(1L);
@@ -103,7 +103,7 @@ public class PoServiceImplTests {
         when(poiRepository.existsById(1L)).thenReturn(false);
 
         // Calling the service method and expecting an exception
-        assertThrows(SystemException.class, () -> poiService.deleteById(1L));
+        assertThrows(ResourceNotFoundException.class, () -> poiService.deleteById(1L));
 
         // Verifying the result
         verify(poiRepository, times(1)).existsById(1L);

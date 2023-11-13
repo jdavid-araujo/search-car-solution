@@ -1,5 +1,6 @@
 package com.david.searchcarservice.service.impl;
 
+import com.david.searchcarservice.exceptionhandler.ResourceNotFoundException;
 import com.david.searchcarservice.exceptionhandler.SystemException;
 import com.david.searchcarservice.model.Position;
 import com.david.searchcarservice.model.Vehicle;
@@ -37,7 +38,7 @@ public class VehicleServiceImpl implements VehicleService {
     @Cacheable(value = "vehicleCache", key = "#id")
     @Override
     public Vehicle findById(Long id) {
-        return this.vehicleRepository.findById(id).orElseThrow(() -> new SystemException("Resource not found with id: " + id));
+        return this.vehicleRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Resource not found with id: " + id));
     }
 
     /**
@@ -80,7 +81,7 @@ public class VehicleServiceImpl implements VehicleService {
     @Override
     public void deleteById(Long id) {
         if(!this.isExist(id)) {
-            throw new SystemException("Resource does not exist id: " + id);
+            throw new ResourceNotFoundException("Resource does not exist id: " + id);
         }
 
         this.vehicleRepository.deleteById(id);

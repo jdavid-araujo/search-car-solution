@@ -1,25 +1,21 @@
 package com.david.searchcarservice.unitTest;
 
-import com.david.searchcarservice.exceptionhandler.SystemException;
+import com.david.searchcarservice.exceptionhandler.ResourceNotFoundException;
 import com.david.searchcarservice.model.Position;
 import com.david.searchcarservice.model.Vehicle;
-import com.david.searchcarservice.repository.PositionRepository;
 import com.david.searchcarservice.repository.VehicleRepository;
 import com.david.searchcarservice.service.PositionService;
-import com.david.searchcarservice.service.VehicleService;
 import com.david.searchcarservice.service.impl.VehicleServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.springframework.cache.Cache;
-import org.springframework.cache.CacheManager;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -67,7 +63,7 @@ public class VehicleServiceImplTests {
         when(vehicleRepository.findById(vehicleId)).thenReturn(Optional.empty());
 
         // Calling the service method should throw an exception
-        assertThrows(SystemException.class, () -> vehicleService.findById(vehicleId));
+        assertThrows(ResourceNotFoundException.class, () -> vehicleService.findById(vehicleId));
 
         // Verifying the interactions
         verify(vehicleRepository, times(1)).findById(vehicleId);

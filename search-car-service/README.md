@@ -1,5 +1,5 @@
 ## About
-The project has as finality register regions and verify how much time a vehicle stay on that region
+The project has as finality to verify how much time a vehicle stay on a region
 
 ## Technologies
   * Java API for bean validation
@@ -13,6 +13,7 @@ The project has as finality register regions and verify how much time a vehicle 
   * Swagger
   * Unit Test
   * Internationalization in Spring Boot
+  * Gradlew
 
 ## How to run
 

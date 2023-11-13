@@ -53,7 +53,7 @@ public class VehicleServiceImpl implements VehicleService {
     /**
      * Return a list of vehicles filted by placa
      * @param placa A placa of a vehicle
-     * @param pageable An object usend to sort and page a result
+     * @param pageable An object used to sort and page a result
      * @return
      */
     @Override
@@ -61,6 +61,12 @@ public class VehicleServiceImpl implements VehicleService {
         return this.vehicleRepository.findByPlaca(placa, pageable);
     }
 
+    /**
+     * Update a vehicle by id
+     * @param id The id of the vehicle
+     * @param entity The new data of vehicle
+     * @return A vehicle of the updated data
+     */
     @CachePut(value = "vehicleCache", key = "#id")
     @Override
     public Vehicle update(Long id, Vehicle entity) {
@@ -71,12 +77,20 @@ public class VehicleServiceImpl implements VehicleService {
         return this.vehicleRepository.save(vehicle);
     }
 
+    /**
+     * Sava a new vehicle
+     * @param entity A vehicle
+     */
     @Override
     public void save(Vehicle entity) {
         this.vehicleRepository.save(entity);
     }
 
 
+    /**
+     * Remove a vehicle by id
+     * @param id The id of a vehicle
+     */
     @CacheEvict(value = "vehicleCache", key = "#id")
     @Override
     public void deleteById(Long id) {
@@ -87,6 +101,11 @@ public class VehicleServiceImpl implements VehicleService {
         this.vehicleRepository.deleteById(id);
     }
 
+    /**
+     * Verify if a vehicle exist on database
+     * @param id The id of a vehicle
+     * @return true or false
+     */
     @Override
     public boolean isExist(Long id) {
         return this.vehicleRepository.existsById(id);

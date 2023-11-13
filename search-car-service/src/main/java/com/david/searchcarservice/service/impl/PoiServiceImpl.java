@@ -1,7 +1,6 @@
 package com.david.searchcarservice.service.impl;
 
 import com.david.searchcarservice.exceptionhandler.ResourceNotFoundException;
-import com.david.searchcarservice.exceptionhandler.SystemException;
 import com.david.searchcarservice.model.Poi;
 import com.david.searchcarservice.repository.PoiRepository;
 import com.david.searchcarservice.service.PoiService;
@@ -24,18 +23,30 @@ public class PoiServiceImpl implements PoiService {
         this.poiRepository = poiRepository;
     }
 
-    @Cacheable(value = "poiCache", key = "#id")
+    /**
+     * Find a Poi by id
+     * @param id The id of a poi
+     * @return a Poi
+     */    @Cacheable(value = "poiCache", key = "#id")
     @Override
     public Poi findById(Long id) {
         return this.poiRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Resource not found with id: " + id));
     }
 
-    @Override
+    /**
+     * Return a list of all Poi
+     * @return List of Poi
+     */@Override
     public List<Poi> findAll() {
         return this.poiRepository.findAll();
     }
 
-    @CachePut(value = "poiCache", key = "#id")
+    /**
+     * Update a Poi by id
+     * @param id The id of the Poi
+     * @param entity The new data of Poi
+     * @return A Poi of the updated data
+     */@CachePut(value = "poiCache", key = "#id")
     @Override
     public Poi update(Long id, Poi entity) {
         Poi poi = this.findById(id);
@@ -45,12 +56,20 @@ public class PoiServiceImpl implements PoiService {
         return this.poiRepository.save(poi);
     }
 
-    @Override
+    /**
+     * Sava a new Poi
+     * @param entity A Poi
+     */@Override
     public void save(Poi entity) {
         this.poiRepository.save(entity);
     }
 
-    @Override
+    /**
+     * Return a list of Poi filted by name
+     * @param name A name of a Poi
+     * @param pageable An object used to sort and page a result
+     * @return
+     */@Override
     public Page<Poi> search(String name, Pageable pageable) {
         return this.poiRepository.findByName(name, pageable);
     }
@@ -65,7 +84,11 @@ public class PoiServiceImpl implements PoiService {
         this.poiRepository.deleteById(id);
     }
 
-    @Override
+    /**
+     * Verify if a Poi exist on database
+     * @param id The id of a Poi
+     * @return true or false
+     */@Override
     public boolean isExist(Long id) {
         return this.poiRepository.existsById(id);
     }

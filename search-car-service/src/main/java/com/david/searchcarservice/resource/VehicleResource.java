@@ -162,7 +162,7 @@ public class VehicleResource {
         this.vehicleService.deleteById(id);
     }
 
-    @Operation(summary = "Search the period of time of a vehicle with a Vehicle")
+    @Operation(summary = "Search the period of time of a vehicle on a Poi")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "It was able to get the result",
                     content = @Content(mediaType = "application/json")),

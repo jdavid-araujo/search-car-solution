@@ -53,30 +53,6 @@ public class VeiculosPoiServiceImpl implements VeiculosPoiService   {
         return veiculoPoiTimeMap;
     }
 
-    /**
-     * Calcule the time that a vehicle stay on each poi basead on each vehicle's position
-     * @param pois a List of pois
-     * @param positions A list of position of a vehicle
-     * @return The time of a vehicle stay on each poi in seconds
-     */
-   /* List<PoiTimeModal> getQuantityTime(List<Poi> pois, List<Position> positions) {
-        List<PoiTimeModal> poiTimeModals = new ArrayList<>();
-
-        for(Poi poi : pois) {
-            List<Position> registrosNoPOI = getRegisterOfPoi(positions, poi);
-
-            if(!registrosNoPOI.isEmpty()) {
-                LocalDateTime entrada = registrosNoPOI.get(0).getDataPosicao();
-                LocalDateTime saida = registrosNoPOI.get(registrosNoPOI.size() - 1).getDataPosicao();
-
-                poiTimeModals.add(new PoiTimeModal(poi.getName(), Duration.between(entrada, saida).getSeconds()));
-
-            }
-
-        }
-
-        return poiTimeModals;
-    }*/
 
     /**
      * Calcule the time that a vehicle stay on each poi basead on each vehicle's position
@@ -135,6 +111,34 @@ public class VeiculosPoiServiceImpl implements VeiculosPoiService   {
     }
 
 
+    // Another way to calculate
+
+/**
+ * Calcule the time that a vehicle stay on each poi basead on each vehicle's position
+ * @param pois a List of pois
+ * @param positions A list of position of a vehicle
+ * @return The time of a vehicle stay on each poi in seconds
+ */
+   /* List<PoiTimeModal> getQuantityTime(List<Poi> pois, List<Position> positions) {
+        List<PoiTimeModal> poiTimeModals = new ArrayList<>();
+
+        for(Poi poi : pois) {
+            List<Position> registrosNoPOI = getRegisterOfPoi(positions, poi);
+
+            if(!registrosNoPOI.isEmpty()) {
+                LocalDateTime entrada = registrosNoPOI.get(0).getDataPosicao();
+                LocalDateTime saida = registrosNoPOI.get(registrosNoPOI.size() - 1).getDataPosicao();
+
+                poiTimeModals.add(new PoiTimeModal(poi.getName(), Duration.between(entrada, saida).getSeconds()));
+
+            }
+
+        }
+
+        return poiTimeModals;
+    }*/
+
+
     /*public List<Position> getRegisterOfPoi(List<Position> positions, Poi poi ) {
         return positions.stream()
                 .filter(registro -> this.calcularDistancia(registro.getLatitude(), registro.getLongitude(), poi.getLatitude(), poi.getLongitude()) <= poi.getRaio())
@@ -151,7 +155,7 @@ public class VeiculosPoiServiceImpl implements VeiculosPoiService   {
      * @return the distance
      */
     private double calcularDistancia(double lat1, double lon1, double lat2, double lon2) {
-        final int R = 6371; // Raio da Terra em quilômetros
+        final int R = 6371000; // Raio da Terra em metros
 
         double latDistance = Math.toRadians(lat2 - lat1);
         double lonDistance = Math.toRadians(lon2 - lon1);

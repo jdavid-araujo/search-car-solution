@@ -8,7 +8,9 @@ import lombok.Getter;
 @AllArgsConstructor
 public class PoiTimeModal {
 
-    private String Poiname;
+    private Long PoiId;
+
+    private String PoiName;
 
     private Long time;
 }

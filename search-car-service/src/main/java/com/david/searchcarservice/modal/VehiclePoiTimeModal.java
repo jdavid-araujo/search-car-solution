@@ -7,9 +7,11 @@ import java.util.List;
 
 @Getter
 @AllArgsConstructor
-public class PlacaPoiTImeModal {
+public class VehiclePoiTimeModal {
 
-    private Long idPlaca;
+    private Long idVehicle;
+
+    private String vehicleName;
 
     private List<PoiTimeModal> poiTimeModals;
 }

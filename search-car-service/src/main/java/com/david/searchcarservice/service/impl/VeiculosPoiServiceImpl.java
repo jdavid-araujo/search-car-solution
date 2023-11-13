@@ -1,6 +1,7 @@
 package com.david.searchcarservice.service.impl;
 
 
+import com.david.searchcarservice.modal.VehiclePoiTimeModal;
 import com.david.searchcarservice.modal.PoiTimeModal;
 import com.david.searchcarservice.modal.VehicleDataSearchModal;
 import com.david.searchcarservice.model.Poi;
@@ -32,8 +33,8 @@ public class VeiculosPoiServiceImpl implements VeiculosPoiService   {
      * @param vehicleDataSearchModal
      * @return a object containg the placa with the poi ids and the time that the vehicle stay on the poi
      */
-    public Map<String, List<PoiTimeModal>> search(VehicleDataSearchModal vehicleDataSearchModal) {
-        Map<String, List<PoiTimeModal>> veiculoPoiTimeMap = new HashMap<>();
+    public List<VehiclePoiTimeModal> search(VehicleDataSearchModal vehicleDataSearchModal) {
+        List<VehiclePoiTimeModal> veiculoPoiTimeList = new ArrayList<>();
 
         List<Poi> pois = Optional.ofNullable(poiService.findAll()).orElse(Collections.emptyList());
 
@@ -43,14 +44,15 @@ public class VeiculosPoiServiceImpl implements VeiculosPoiService   {
                                                                             , vehicleDataSearchModal.getPlaca()))
                                                                             .orElse(Collections.emptyList());
 
-        Map<String, List<Position>> carMap = positionsAll.stream()
-                .collect(Collectors.groupingBy(position -> position.getVehicle().getPlaca()));
+        Map<Long, List<Position>> carMap = positionsAll.stream()
+                .collect(Collectors.groupingBy(position -> position.getVehicle().getId()));
 
-        for(String placaKey : carMap.keySet()) {
-           veiculoPoiTimeMap.put(placaKey, this.getQuantityTime(pois, carMap.get(placaKey)));
+        for(Long vehicleId : carMap.keySet()) {
+            veiculoPoiTimeList.add(new VehiclePoiTimeModal(vehicleId, carMap.get(vehicleId).get(0).getVehicle().getPlaca(),  this.getQuantityTime(pois, carMap.get(vehicleId))));
+        //    veiculoPoiTimeList.put(String.valueOf(vehicleId), this.getQuantityTime(pois, carMap.get(vehicleId)));
         }
 
-        return veiculoPoiTimeMap;
+        return veiculoPoiTimeList;
     }
 
 
@@ -65,7 +67,7 @@ public class VeiculosPoiServiceImpl implements VeiculosPoiService   {
 
         for(Poi poi : pois) {
             Long time = getRegisterOfPoi(positions, poi);
-            poiTimeModals.add(new PoiTimeModal(poi.getName(), time));
+            poiTimeModals.add(new PoiTimeModal(poi.getId(),poi.getName(), time));
         }
 
         return poiTimeModals;
@@ -73,7 +75,7 @@ public class VeiculosPoiServiceImpl implements VeiculosPoiService   {
 
     /**
      * Calcule the time that a vehicle stay on each poi basead on each vehicle's position
-     * @param pois a List of pois
+     * @param poi a List of pois
      * @param positions A list of position of a vehicle
      * @return The time of a vehicle stay on each poi in seconds
      */

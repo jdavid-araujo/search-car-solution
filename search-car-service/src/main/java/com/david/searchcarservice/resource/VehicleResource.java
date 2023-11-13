@@ -1,13 +1,9 @@
 package com.david.searchcarservice.resource;
 
 import com.david.searchcarservice.exceptionhandler.Error;
-import com.david.searchcarservice.modal.PoiTimeModal;
-import com.david.searchcarservice.modal.PositionModal;
-import com.david.searchcarservice.modal.VehicleDataSearchModal;
-import com.david.searchcarservice.modal.VehicleModal;
+import com.david.searchcarservice.modal.*;
 import com.david.searchcarservice.modal.mapper.PositionMapper;
 import com.david.searchcarservice.modal.mapper.VeihicleMapper;
-import com.david.searchcarservice.model.Poi;
 import com.david.searchcarservice.model.Position;
 import com.david.searchcarservice.model.Vehicle;
 import com.david.searchcarservice.service.VehicleService;
@@ -26,9 +22,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
-import java.util.Map;
 
 @Tag(name = "Vehicle", description = "Vehicle management APIs")
 @RestController
@@ -165,7 +159,8 @@ public class VehicleResource {
     @Operation(summary = "Search the period of time of a vehicle on a Poi")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "It was able to get the result",
-                    content = @Content(mediaType = "application/json")),
+                    content = @Content(mediaType = "application/json",
+                            schema = @Schema(type = "array", implementation = VehiclePoiTimeModal.class))),
             @ApiResponse(responseCode = "400", content = @Content(mediaType = "application/json",
                     schema = @Schema(implementation = Error.class))),
             @ApiResponse(responseCode = "500",  content = @Content(mediaType = "application/json",
@@ -173,7 +168,7 @@ public class VehicleResource {
     })
     @ResponseStatus(HttpStatus.OK)
     @GetMapping("/tempo-poi")
-    public Map<String, List<PoiTimeModal>> search(@Valid @ModelAttribute VehicleDataSearchModal vehicleDataSearchModal) {
+    public List<VehiclePoiTimeModal> search(@Valid @ModelAttribute VehicleDataSearchModal vehicleDataSearchModal) {
         return this.veiculosPoiService.search(vehicleDataSearchModal);
     }
 }

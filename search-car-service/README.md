@@ -14,6 +14,8 @@ The project has as finality to verify how much time a vehicle stay on a region
   * Unit Test
   * Internationalization in Spring Boot
   * Gradlew
+  * Prometheus
+  * Grafana
 
 ## How to run
 

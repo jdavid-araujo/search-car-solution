@@ -24,3 +24,17 @@ spring:
       dialect: org.hibernate.dialect.PostgreSQLDialect
       ddl-auto: update
     show-sql: true
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+  endpoint:
+    metrics:
+      enabled: true
+    prometheus:
+      enabled: true
+  metrics:
+    export:
+      prometheus:
+        enabled: true

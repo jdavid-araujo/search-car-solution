@@ -7,7 +7,7 @@ The project has as finality to verify how much time a vehicle stay on a region
   * Spring Boot
   * Rest with Spring
   * Error Handling for REST with Spring
-  * Redis
+  * Redis (caching)
   * Docker Compose
   * Kubernetes
   * Swagger
